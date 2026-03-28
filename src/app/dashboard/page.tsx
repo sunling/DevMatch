@@ -28,6 +28,8 @@ import {
 } from "@/lib/dev-auth";
 import PersonalityCard from "@/components/PersonalityCard";
 import SetupProfileButton from "@/components/SetupProfileButton";
+import { useRealtime } from "@/hooks/useRealtime";
+import { RealtimeToast, ConnectionStatus } from "@/components/RealtimeToast";
 
 // --- Helper functions ---
 
@@ -238,6 +240,15 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [analyzing, setAnalyzing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Realtime notifications
+  const {
+    isConnected,
+    matchNotification,
+    activityNotification,
+    clearMatchNotification,
+    clearActivityNotification,
+  } = useRealtime(user?.id || null);
 
   // Analyze repos and update skills
   const analyzeRepos = async (githubId: string) => {
@@ -512,6 +523,15 @@ export default function DashboardPage() {
           </div>
         </div>
       </header>
+
+      {/* Realtime Notifications */}
+      <RealtimeToast
+        matchNotification={matchNotification}
+        activityNotification={activityNotification}
+        onCloseMatch={clearMatchNotification}
+        onCloseActivity={clearActivityNotification}
+      />
+      <ConnectionStatus isConnected={isConnected} />
 
       {/* Main content */}
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
