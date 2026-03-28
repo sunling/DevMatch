@@ -198,16 +198,41 @@ function MatchCard({ match, userRadar }: { match: EnhancedMatch; userRadar?: any
               </div>
             )}
 
-            {/* Score Breakdown */}
+            {/* Score Breakdown - Why you match */}
             {match.breakdown && (
               <div className="mt-3 pt-3 border-t border-gray-100">
-                <div className="grid grid-cols-3 gap-1 text-xs">
-                  {Object.entries(match.breakdown).slice(0, 3).map(([key, value]) => (
-                    <div key={key} className="text-center">
-                      <div className="font-semibold text-gray-700">{value}</div>
-                      <div className="text-gray-400 capitalize">{key}</div>
-                    </div>
-                  ))}
+                <div className="text-xs text-gray-500 mb-2">Why you match</div>
+                <div className="flex flex-wrap gap-2">
+                  {match.breakdown.domain > 15 && (
+                    <span className="px-2 py-1 bg-green-50 text-green-700 rounded text-xs">
+                      Shared interests
+                    </span>
+                  )}
+                  {match.breakdown.vibe > 10 && (
+                    <span className="px-2 py-1 bg-purple-50 text-purple-700 rounded text-xs">
+                      Values align
+                    </span>
+                  )}
+                  {match.breakdown.velocity > 10 && (
+                    <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded text-xs">
+                      Similar pace
+                    </span>
+                  )}
+                  {match.breakdown.collaboration > 10 && (
+                    <span className="px-2 py-1 bg-orange-50 text-orange-700 rounded text-xs">
+                      Work style fit
+                    </span>
+                  )}
+                  {match.breakdown.builder > 10 && (
+                    <span className="px-2 py-1 bg-pink-50 text-pink-700 rounded text-xs">
+                      Complementary builders
+                    </span>
+                  )}
+                  {match.breakdown.dna > 5 && (
+                    <span className="px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-xs">
+                      Behavioral match
+                    </span>
+                  )}
                 </div>
               </div>
             )}
