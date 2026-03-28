@@ -563,15 +563,6 @@ export default function DashboardPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <Link
-                href="/projects"
-                className="flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 text-sm font-medium transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-                Project Board
-              </Link>
               {isDevBypassEnabled() && isDevAuthenticated() && (
                 <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs font-medium rounded">
                   DEV MODE
