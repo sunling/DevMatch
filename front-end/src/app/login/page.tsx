@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/insforge'
+import { insforge } from '@/lib/insforge'
 import { isDevBypassEnabled, devSignIn, isDevAuthenticated } from '@/lib/dev-auth'
 
 // GitHub SVG icon
@@ -34,11 +34,9 @@ export default function LoginPage() {
   const handleGitHubLogin = async () => {
     setIsLoading(true)
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await insforge.auth.signInWithOAuth({
         provider: 'github',
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
+        redirectTo: `${window.location.origin}/dashboard`,
       })
       
       if (error) {

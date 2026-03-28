@@ -3,10 +3,29 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { MapPin, ExternalLink, LogOut, Loader2 } from 'lucide-react'
-import { supabase, User, Skill, Match } from '@/lib/insforge'
+import { MapPin, ExternalLink, LogOut, Loader2, Sparkles } from 'lucide-react'
+import { insforge, User, Skill, Match } from '@/lib/insforge'
 import { mockCurrentUser, mockCurrentUserSkills, mockMatches } from '@/lib/mock-data'
 import { isDevBypassEnabled, isDevAuthenticated, getStoredDevUser, devSignOut } from '@/lib/dev-auth'
+
+// Get rarity color for personality card
+function getRarityColor(rarity: string) {
+  switch (rarity) {
+    case 'legendary': return 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+    case 'epic': return 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+    case 'rare': return 'bg-gradient-to-r from-green-400 to-blue-500 text-white'
+    default: return 'bg-gradient-to-r from-gray-400 to-gray-500 text-white'
+  }
+}
+
+function getRarityEmoji(rarity: string) {
+  switch (rarity) {
+    case 'legendary': return '👑'
+    case 'epic': return '⚡'
+    case 'rare': return '💎'
+    default: return '📄'
+  }
+}
 
 // Match card component
 function MatchCard({ match }: { match: Match }) {
@@ -43,6 +62,14 @@ function MatchCard({ match }: { match: Match }) {
               <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
                 <MapPin className="w-3.5 h-3.5" />
                 <span className="truncate">{match.location}</span>
+              </div>
+            )}
+
+            {/* Personality Card Badge */}
+            {match.personality && (
+              <div className={`mt-2 px-2 py-1 rounded-lg text-xs font-medium inline-flex items-center gap-1 ${getRarityColor(match.personality.rarity)}`}>
+                <Sparkles className="w-3 h-3" />
+                <span>{getRarityEmoji(match.personality.rarity)} {match.personality.title}</span>
               </div>
             )}
 
@@ -151,8 +178,9 @@ export default function DashboardPage() {
           return
         }
 
-        // Check if user is authenticated with Supabase
-        const { data: { user: authUser } } = await supabase.auth.getUser()
+        // Check if user is authenticated with InsForge
+        const { data: authData } = await insforge.auth.getCurrentUser()
+        const authUser = authData?.user
         
         if (!authUser && !useMockData) {
           router.push('/login')
@@ -168,27 +196,26 @@ export default function DashboardPage() {
           return
         }
 
-        // Fetch real data from Supabase
-        const { data: userData } = await supabase
+        // Fetch real data from InsForge
+        const { data: userRecord } = await insforge.database
           .from('users')
           .select('*')
           .eq('id', authUser?.id)
           .single()
 
-        const { data: skillsData } = await supabase
+        const { data: skillsData } = await insforge.database
           .from('skills')
           .select('*')
           .eq('user_id', authUser?.id)
 
-        // Fetch matches from API endpoint (Supabase Edge Function)
-        const { data: matchesData, error: functionError } = await supabase.functions.invoke(
-          'matches',
-          { body: { userId: authUser?.id } }
-        )
+        // Fetch matches from InsForge Edge Function
+        const { data: matchesData, error: functionError } = await insforge.functions.invoke('matches', {
+          body: { userId: authUser?.id }
+        })
 
-        setUser(userData)
+        setUser(userRecord)
         setSkills(skillsData || [])
-        setMatches(matchesData || [])
+        setMatches(matchesData?.matches || [])
       } catch (error) {
         console.error('Error loading dashboard:', error)
         // Fall back to mock data on error
@@ -208,8 +235,8 @@ export default function DashboardPage() {
     if (isDevBypassEnabled() && isDevAuthenticated()) {
       devSignOut()
     }
-    // Sign out from Supabase
-    await supabase.auth.signOut()
+    // Sign out from InsForge
+    await insforge.auth.signOut()
     router.push('/login')
   }
 

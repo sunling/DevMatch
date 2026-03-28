@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, MapPin, ExternalLink, Loader2 } from 'lucide-react'
-import { supabase, User, Skill } from '@/lib/insforge'
+import { insforge, User, Skill } from '@/lib/insforge'
 import { mockUsers, mockMatches } from '@/lib/mock-data'
 
 // GitHub SVG icon
@@ -52,26 +52,26 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
           return
         }
 
-        // Fetch real data from Supabase
-        const { data: userData } = await supabase
+        // Fetch real data from InsForge
+        const { data: userData } = await insforge.database
           .from('users')
           .select('*')
           .eq('id', userId)
           .single()
 
-        const { data: skillsData } = await supabase
+        const { data: skillsData } = await insforge.database
           .from('skills')
           .select('*')
           .eq('user_id', userId)
 
-        // Get match info from the matches API (Supabase Edge Function)
-        const { data: { user: currentUser } } = await supabase.auth.getUser()
-        const { data: matchesData } = await supabase.functions.invoke(
-          'matches',
-          { body: { userId: currentUser?.id } }
-        )
+        // Get match info from the matches API (InsForge Edge Function)
+        const { data: authData } = await insforge.auth.getCurrentUser()
+        const currentUser = authData?.user
+        const { data: matchesData } = await insforge.functions.invoke('matches', {
+          body: { userId: currentUser?.id }
+        })
 
-        const matchData = matchesData?.find((m: any) => m.userId === userId)
+        const matchData = matchesData?.matches?.find((m: any) => m.userId === userId)
 
         setUser(userData)
         setSkills(skillsData?.map((s: Skill) => s.skill_name) || [])

@@ -1,9 +1,12 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@insforge/sdk'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321'
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0'
+const insforgeUrl = process.env.NEXT_PUBLIC_INSFORGE_URL || 'https://wy95uqan.us-east.insforge.app'
+const insforgeAnonKey = process.env.NEXT_PUBLIC_INSFORGE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0'
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const insforge = createClient({
+  baseUrl: insforgeUrl,
+  anonKey: insforgeAnonKey
+})
 
 export type User = {
   id: string
@@ -22,6 +25,13 @@ export type Skill = {
   skill_count: number
 }
 
+export type Personality = {
+  type: string
+  title: string
+  description: string
+  rarity: 'common' | 'rare' | 'epic' | 'legendary'
+}
+
 export type Match = {
   userId: string
   name: string
@@ -32,4 +42,5 @@ export type Match = {
   location?: string
   bio?: string
   htmlUrl?: string
+  personality?: Personality
 }
