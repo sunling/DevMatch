@@ -2,9 +2,10 @@
   command = "npm run build"
   publish = "dist"
 
-# Environment variables should be set in Netlify dashboard
-# NEXT_PUBLIC_INSFORGE_BASE_URL
-# NEXT_PUBLIC_INSFORGE_ANON_KEY
+# Environment variables should be set in Netlify dashboard:
+# NEXT_PUBLIC_INSFORGE_BASE_URL=https://your-app.insforge.app
+# NEXT_PUBLIC_INSFORGE_ANON_KEY=your-anon-key
+# NEXT_PUBLIC_REDIRECT_URL=https://your-site.netlify.app/dashboard
 
 # Handle client-side routing for Next.js
 [[redirects]]

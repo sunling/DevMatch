@@ -50,9 +50,11 @@ export default function LoginPage() {
   const handleOAuthLogin = async (provider: string) => {
     setIsLoading(true);
     try {
+      // Use hardcoded redirect URL for production, fallback to window.location for dev
+      const redirectUrl = process.env.NEXT_PUBLIC_REDIRECT_URL || `${window.location.origin}/dashboard`;
       const { error } = await insforge.auth.signInWithOAuth({
         provider,
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: redirectUrl,
       });
 
       if (error) {
