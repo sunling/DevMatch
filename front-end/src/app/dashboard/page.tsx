@@ -7,6 +7,7 @@ import { MapPin, ExternalLink, LogOut, Loader2, Sparkles } from 'lucide-react'
 import { insforge, User, Skill, Match } from '@/lib/insforge'
 import { mockCurrentUser, mockCurrentUserSkills, mockMatches } from '@/lib/mock-data'
 import { isDevBypassEnabled, isDevAuthenticated, getStoredDevUser, devSignOut } from '@/lib/dev-auth'
+import SetupProfileButton from '@/components/SetupProfileButton'
 
 // Get rarity color for personality card
 function getRarityColor(rarity: string) {
@@ -338,8 +339,9 @@ export default function DashboardPage() {
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left column - Profile */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <ProfileCard user={user} skills={skills} />
+            <SetupProfileButton />
           </div>
 
           {/* Right column - Matches */}
