@@ -23,7 +23,7 @@ import {
   getStoredDevUser,
   devSignOut,
 } from "@/lib/dev-auth";
-import PersonalityCard from "@/components/PersonalityCard";
+
 
 import VisionProfileSetup from "@/components/VisionProfileSetup";
 import VisionCard from "@/components/VisionCard";
@@ -32,7 +32,7 @@ import DigitalDNA from "@/components/DigitalDNA";
 import VibeCheck from "@/components/VibeCheck";
 import SynergyRadar, { tasteProfileToRadarData } from "@/components/SynergyRadar";
 import SocialLinks from "@/components/SocialLinks";
-import { getArchetype, type ArchetypeType, DOMAIN_INTERESTS, BUILDER_PHILOSOPHIES } from "@/lib/archetypes";
+
 import { useRealtime } from "@/hooks/useRealtime";
 
 
@@ -66,7 +66,6 @@ function getRarityEmoji(rarity: string) {
 
 // --- MatchCard component ---
 interface EnhancedMatch extends Match {
-  archetype?: string;
   domainInterests?: string[];
   breakdown?: Record<string, number>;
   synergyType?: string;
@@ -117,15 +116,6 @@ function MatchCard({ match, userRadar }: { match: EnhancedMatch; userRadar?: any
               <div className="flex items-center gap-1 text-sm text-gray-500 mt-1">
                 <MapPin className="w-3.5 h-3.5" />
                 <span className="truncate">{match.location}</span>
-              </div>
-            )}
-
-            {/* Archetype Badge */}
-            {match.archetype && (
-              <div className="mt-2">
-                <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${synergyBadge.class}`}>
-                  {synergyBadge.text}
-                </span>
               </div>
             )}
 
@@ -220,34 +210,6 @@ function ProfileCard({
         </p>
       )}
 
-      {/* Vision Profile Section */}
-      {user.archetype && (
-        <div className="mt-4 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="text-2xl">{getArchetype(user.archetype as ArchetypeType).emoji}</span>
-            <span className="font-semibold text-indigo-900">
-              {getArchetype(user.archetype as ArchetypeType).title}
-            </span>
-          </div>
-          {user.builder_philosophy && (
-            <p className="text-xs text-indigo-700 mb-2">
-              {BUILDER_PHILOSOPHIES.find(p => p.id === user.builder_philosophy)?.label}
-            </p>
-          )}
-          {user.domain_interests && user.domain_interests.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {user.domain_interests.slice(0, 3).map((interestId) => {
-                const interest = DOMAIN_INTERESTS.find(i => i.id === interestId);
-                return interest ? (
-                  <span key={interestId} className="text-xs px-2 py-0.5 bg-white/70 text-indigo-700 rounded-full">
-                    {interest.label}
-                  </span>
-                ) : null;
-              })}
-            </div>
-          )}
-        </div>
-      )}
     </div>
   );
 }
@@ -647,15 +609,6 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
-            <PersonalityCard
-              userId={user?.id || ""}
-              initialPersonality={user?.personality_type ? {
-                type: user.personality_type,
-                title: user.personality_title || "",
-                description: user.personality_description || "",
-                rarity: user.personality_rarity || "common"
-              } : null}
-            />
             {/* Social Links - LinkedIn, Google Scholar */}
             <SocialLinks 
               userId={user.id} 

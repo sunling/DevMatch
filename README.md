@@ -28,24 +28,7 @@ Answer 5 quick questions about your work style:
 
 These responses create your "Digital DNA" — a behavioral fingerprint for matching.
 
-### 2. Developer Archetypes
-
-Based on your vibe check and GitHub activity, you're assigned one of 8 archetypes:
-
-| Archetype | Rarity | Who You Are |
-|-----------|--------|-------------|
-| 🔮 Visionary | Legendary | Sees the future and builds toward it |
-| ✨ Polisher | Epic | Perfects every detail before shipping |
-| 🏗️ Systems Thinker | Rare | Architects robust infrastructure |
-| 🔗 Connector | Rare | Brings people and ideas together |
-| 🎨 Vibe Curator | Epic | Crafts experiences with aesthetic sense |
-| 🤖 Prompt Architect | Legendary | Masters AI tools and workflows |
-| ⚡ Hacker | Common | Ships fast and iterates |
-| 🛡️ Protector | Rare | Guards code quality and best practices |
-
-Rarity tiers (Common / Rare / Epic / Legendary) make profiles feel unique and collectible.
-
-### 3. Project Visions
+### 2. Project Visions
 
 Share your dream project — what you'd build with unlimited resources. This becomes the centerpiece of your profile and helps find collaborators who share your passion.
 
@@ -55,10 +38,9 @@ Every match is scored using:
 
 | Factor | Weight | Description |
 |--------|--------|-------------|
-| **Vibe Alignment** | 30% | Shared values from vibe check responses |
-| **Archetype Complementarity** | 25% | Compatible work styles |
-| **Vision Resonance** | 25% | Similar domain interests and dream projects |
-| **Digital DNA** | 20% | Behavioral signals from GitHub activity |
+| **Vibe Alignment** | 40% | Shared values from vibe check responses |
+| **Vision Resonance** | 35% | Similar domain interests and dream projects |
+| **Digital DNA** | 25% | Behavioral signals from GitHub activity |
 
 Each match shows *why* you matched with detailed breakdowns.
 
@@ -66,10 +48,9 @@ Each match shows *why* you matched with detailed breakdowns.
 
 ### Core Matching
 - **Vibe Check** — 5-question onboarding to capture your work style and values
-- **Developer Archetypes** — personality types with rarity tiers (Common through Legendary)
 - **Project Visions** — share your dream project to find like-minded collaborators
 - **Digital DNA** — behavioral analysis of your GitHub activity patterns
-- **Multi-factor scoring** — vibe + archetype + vision + behavior for better matches
+- **Multi-factor scoring** — vibe + vision + behavior for better matches
 - **Real-time notifications** when compatible developers join (WebSocket)
 
 ### Event Sessions
@@ -80,7 +61,7 @@ Each match shows *why* you matched with detailed breakdowns.
 - **Share link** — one-click copy of join code or event URL
 
 ### Profile & Settings
-- **Enhanced Profile Pages** — personality card, Digital DNA, vibe check results, project visions
+- **Enhanced Profile Pages** — Digital DNA, vibe check results, project visions
 - **GitHub Matcher** — search any GitHub username and see their matches (no login required)
 - **Settings** — edit bio, dream project, availability, project status, and vibe check responses
 - **Social Links** — add LinkedIn and Google Scholar profiles
@@ -136,7 +117,7 @@ Each match shows *why* you matched with detailed breakdowns.
 
 | Table | Purpose |
 |-------|---------|
-| `users` | GitHub profiles + archetype + personality + vision fields |
+| `users` | GitHub profiles + vision fields + vibe check data |
 | `vibe_check_responses` | User's 5 vibe check answers |
 | `user_taste_profiles` | Digital DNA behavioral signals |
 | `project_visions` | User's dream project postings |
