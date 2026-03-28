@@ -130,6 +130,13 @@ export default async function(req) {
           matchScore: Math.round(score.total),
           breakdown: score.breakdown,
           vibeResponses: otherVibe ? otherVibe.responses : null,
+          digitalDNA: otherTaste ? {
+            velocity: otherTaste.taste_signals?.velocity_score,
+            collaboration: otherTaste.taste_signals?.collaboration_score,
+            readme: otherTaste.taste_signals?.readme_score,
+            builder: otherTaste.builder_archetype,
+            curiosity: otherTaste.taste_signals?.curiosity_areas?.slice(0, 2),
+          } : null,
         });
       }
     }

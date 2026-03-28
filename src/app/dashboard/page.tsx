@@ -69,6 +69,13 @@ interface EnhancedMatch extends Match {
   domainInterests?: string[];
   breakdown?: Record<string, number>;
   vibeResponses?: Record<string, string>;
+  digitalDNA?: {
+    velocity?: number;
+    collaboration?: number;
+    readme?: number;
+    builder?: string;
+    curiosity?: string[];
+  };
 }
 
 function MatchCard({ match, userRadar }: { match: EnhancedMatch; userRadar?: any }) {
@@ -141,6 +148,41 @@ function MatchCard({ match, userRadar }: { match: EnhancedMatch; userRadar?: any
                     {match.vibeResponses["time-horizon"] === "iterate" && "🔄 User-centric"}
                   </span>
                 )}
+              </div>
+            )}
+
+            {/* Digital DNA Signals */}
+            {match.digitalDNA && (
+              <div className="mt-3 pt-3 border-t border-gray-100">
+                <div className="flex flex-wrap gap-2 text-xs">
+                  {match.digitalDNA.builder && (
+                    <span className="inline-flex items-center gap-1 text-gray-600">
+                      <span className="w-2 h-2 rounded-full bg-orange-400"></span>
+                      {match.digitalDNA.builder === "hacker" && "Hacker"}
+                      {match.digitalDNA.builder === "craftsman" && "Craftsman"}
+                      {match.digitalDNA.builder === "architect" && "Architect"}
+                      {match.digitalDNA.builder === "perfectionist" && "Perfectionist"}
+                    </span>
+                  )}
+                  {match.digitalDNA.velocity !== undefined && (
+                    <span className="inline-flex items-center gap-1 text-gray-600">
+                      <span className="w-2 h-2 rounded-full bg-green-400"></span>
+                      {match.digitalDNA.velocity >= 70 ? "Fast" : match.digitalDNA.velocity >= 40 ? "Steady" : "Deliberate"}
+                    </span>
+                  )}
+                  {match.digitalDNA.collaboration !== undefined && (
+                    <span className="inline-flex items-center gap-1 text-gray-600">
+                      <span className="w-2 h-2 rounded-full bg-blue-400"></span>
+                      {match.digitalDNA.collaboration >= 70 ? "Collaborative" : match.digitalDNA.collaboration >= 40 ? "Balanced" : "Solo"}
+                    </span>
+                  )}
+                  {match.digitalDNA.curiosity && match.digitalDNA.curiosity.length > 0 && (
+                    <span className="inline-flex items-center gap-1 text-gray-600">
+                      <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+                      {match.digitalDNA.curiosity.join(", ")}
+                    </span>
+                  )}
+                </div>
               </div>
             )}
 
