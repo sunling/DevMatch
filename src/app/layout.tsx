@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevMatch - GitHub Developer Matcher",
+  title: "DevMatch - Vision-First Developer Matching",
   description:
-    "Connect with developers based on your GitHub activity and tech stack",
+    "Find your creative partner based on values, vision, and vibe—not just skills",
 };
 
 export default function RootLayout({
