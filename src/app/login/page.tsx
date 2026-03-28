@@ -54,120 +54,74 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 px-4 py-8">
-      <div className="max-w-md w-full mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-          <div className="mb-6">
-            <div className="w-16 h-16 bg-indigo-600 rounded-xl flex items-center justify-center mx-auto mb-4">
-              <svg
-                className="w-10 h-10 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-                />
-              </svg>
-            </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">DevMatch</h1>
-            <p className="text-gray-600">
-              Connect with developers based on your GitHub activity
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="bg-gray-50 rounded-lg p-4 text-left">
-              <h3 className="font-semibold text-gray-900 mb-2">
-                How it works:
-              </h3>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-600 font-bold">1.</span>
-                  <span>Sign in with your GitHub account</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-600 font-bold">2.</span>
-                  <span>
-                    We analyze your repos and extract your skills
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-indigo-600 font-bold">3.</span>
-                  <span>Get matched with compatible developers</span>
-                </li>
-              </ul>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 px-4 py-12">
+      <div className="max-w-4xl mx-auto">
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left - Login Card */}
+          <div className="bg-white rounded-2xl shadow-xl p-8">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
+                </svg>
+              </div>
+              <h1 className="text-2xl font-bold text-gray-900">DevMatch</h1>
+              <p className="text-gray-500 text-sm mt-1">
+                Find your perfect developer match
+              </p>
             </div>
 
             <button
               onClick={handleGitHubLogin}
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-3 bg-gray-900 hover:bg-gray-800 text-white font-semibold py-3 px-6 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
             >
               <GitHubIcon className="w-5 h-5" />
               {isLoading ? "Connecting..." : "Continue with GitHub"}
             </button>
 
-            <p className="text-xs text-gray-500">
-              By signing in, you agree to share your public GitHub profile
-              information.
+            <p className="text-xs text-gray-400 text-center mt-3">
+              We analyze your repos to find matching developers
             </p>
 
             {devMode && (
-              <div className="pt-4 border-t border-gray-200">
-                <button
-                  onClick={handleDevBypass}
-                  className="w-full flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                  Dev Bypass (Skip Auth)
-                </button>
-                <p className="text-xs text-amber-600 mt-2">
-                  Quick access for UI development
-                </p>
-              </div>
+              <button
+                onClick={handleDevBypass}
+                className="w-full mt-4 flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Dev Bypass
+              </button>
             )}
+          </div>
+
+          {/* Right - GitHub Matcher (Try Without Login) */}
+          <div>
+            <GitHubMatcher />
           </div>
         </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600">
-            Built with{" "}
-            <span className="font-semibold text-indigo-600">Qoder</span> +{" "}
-            <span className="font-semibold text-indigo-600">InsForge</span>
-          </p>
-        </div>
-      </div>
-
-      {/* Try Without Login Section */}
-      <div className="max-w-2xl w-full mx-auto mt-8">
-        <GitHubMatcher />
-      </div>
-
-      {/* Project Board Link */}
-      <div className="max-w-md w-full mx-auto mt-8">
-        <a
-          href="/projects"
-          className="block bg-white rounded-xl border border-gray-200 p-6 text-center hover:shadow-md transition-shadow"
-        >
-          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-xl flex items-center justify-center mx-auto mb-3">
+        {/* Project Board Link */}
+        <div className="mt-8 text-center">
+          <a
+            href="/projects"
+            className="inline-flex items-center gap-2 bg-white px-6 py-3 rounded-xl shadow-md hover:shadow-lg transition-all text-gray-700 font-medium"
+          >
             <svg
-              className="w-6 h-6 text-white"
+              className="w-5 h-5 text-green-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -179,12 +133,21 @@ export default function LoginPage() {
                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
               />
             </svg>
-          </div>
-          <h3 className="font-bold text-gray-900">Project Board</h3>
-          <p className="text-sm text-gray-600 mt-1">
-            Find collaborators for your next project
+            Browse Project Board
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-xs text-gray-400">
+            Built with{" "}
+            <span className="font-medium text-indigo-500">Qoder</span> +{" "}
+            <span className="font-medium text-indigo-500">InsForge</span>
           </p>
-        </a>
+        </div>
       </div>
     </div>
   );

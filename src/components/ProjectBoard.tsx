@@ -36,6 +36,7 @@ export default function ProjectBoard() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [showApply, setShowApply] = useState(false)
   const [userId, setUserId] = useState<string>('')
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [matchedDevelopers, setMatchedDevelopers] = useState<any[]>([])
   const [loadingMatches, setLoadingMatches] = useState(false)
 
@@ -52,8 +53,8 @@ export default function ProjectBoard() {
     // Get current user ID
     insforge.auth.getCurrentUser().then(({ data }) => {
       if (data?.user) {
-        // Try to find user in our database
         setUserId(data.user.id)
+        setIsLoggedIn(true)
       }
     })
   }, [])
@@ -191,13 +192,23 @@ export default function ProjectBoard() {
           <h2 className="text-2xl font-bold text-gray-900">Project Board</h2>
           <p className="text-gray-600 mt-1">Find collaborators for your next project</p>
         </div>
-        <button
-          onClick={() => setShowCreate(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          <Plus className="w-4 h-4" />
-          Post Project
-        </button>
+        {isLoggedIn ? (
+          <button
+            onClick={() => setShowCreate(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Post Project
+          </button>
+        ) : (
+          <a
+            href="/login"
+            className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Login to Post
+          </a>
+        )}
       </div>
 
       {/* Projects Grid */}
@@ -463,13 +474,23 @@ export default function ProjectBoard() {
               )}
 
               {selectedProject.status === 'open' && selectedProject.collaborators_current < selectedProject.collaborators_max && (
-                <button
-                  onClick={() => setShowApply(true)}
-                  className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  Apply to Join
-                </button>
+                isLoggedIn ? (
+                  <button
+                    onClick={() => setShowApply(true)}
+                    className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center justify-center gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    Apply to Join
+                  </button>
+                ) : (
+                  <a
+                    href="/login"
+                    className="w-full py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center justify-center gap-2"
+                  >
+                    <Send className="w-4 h-4" />
+                    Login to Apply
+                  </a>
+                )
               )}
             </div>
           </div>
