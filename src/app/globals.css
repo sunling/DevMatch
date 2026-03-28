@@ -4,7 +4,10 @@
 
 @layer base {
   :root {
-    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    --background: #ffffff;
+    --foreground: #171717;
+    font-family: var(--font-geist-sans), Inter, system-ui, Avenir, Helvetica,
+      Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
@@ -14,7 +17,16 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #0a0a0a;
+      --foreground: #ededed;
+    }
+  }
+
   body {
     @apply m-0 min-w-[320px] min-h-screen;
+    background: var(--background);
+    color: var(--foreground);
   }
 }
