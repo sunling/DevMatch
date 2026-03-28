@@ -209,7 +209,7 @@ export default function SettingsPage() {
                   id="displayName"
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                  className="w-full px-4 py-2 border border-indigo-300 bg-white text-indigo-600 placeholder-indigo-400 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
                   placeholder="Enter your display name"
                 />
                 <p className="text-sm text-gray-500 mt-1">

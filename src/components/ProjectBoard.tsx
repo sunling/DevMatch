@@ -299,7 +299,7 @@ export default function ProjectBoard() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g., AI Chat Application"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-3 py-2 border border-blue-300 bg-white text-blue-600 placeholder-blue-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                   required
                 />
               </div>
@@ -310,13 +310,13 @@ export default function ProjectBoard() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Describe your project, what you're building, and what help you need..."
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  className="w-full px-3 py-2 border border-blue-300 bg-white text-blue-600 placeholder-blue-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-colors"
                   required
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Skills Needed</label>
-                <div className="flex flex-wrap gap-1 p-2 border border-gray-300 rounded-lg max-h-40 overflow-y-auto">
+                <div className="flex flex-wrap gap-1 p-2 border border-blue-300 bg-white rounded-lg max-h-40 overflow-y-auto">
                   {SKILL_OPTIONS.map((skill) => (
                     <button
                       key={skill}
@@ -341,7 +341,7 @@ export default function ProjectBoard() {
                   max={10}
                   value={collaboratorsMax}
                   onChange={(e) => setCollaboratorsMax(parseInt(e.target.value))}
-                  className="w-20 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-20 px-3 py-2 border border-blue-300 bg-white text-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
                 />
               </div>
               <button
@@ -519,7 +519,7 @@ export default function ProjectBoard() {
                   onChange={(e) => setApplyMessage(e.target.value)}
                   placeholder="Tell the project owner about yourself and why you'd be a good fit..."
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"
+                  className="w-full px-3 py-2 border border-blue-300 bg-white text-blue-600 placeholder-blue-400 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none transition-colors"
                 />
               </div>
               <div className="flex gap-3">
