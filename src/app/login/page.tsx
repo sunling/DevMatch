@@ -8,6 +8,7 @@ import {
   devSignIn,
   isDevAuthenticated,
 } from "@/lib/dev-auth";
+import GitHubMatcher from "@/components/GitHubMatcher";
 
 const GitHubIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -151,6 +152,11 @@ export default function LoginPage() {
             <span className="font-semibold text-indigo-600">InsForge</span>
           </p>
         </div>
+      </div>
+
+      {/* Try Without Login Section */}
+      <div className="max-w-2xl w-full mx-auto mt-8">
+        <GitHubMatcher />
       </div>
 
       {/* Project Board Link */}

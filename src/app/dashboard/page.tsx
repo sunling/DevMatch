@@ -24,6 +24,8 @@ import {
   getStoredDevUser,
   devSignOut,
 } from "@/lib/dev-auth";
+import PersonalityCard from "@/components/PersonalityCard";
+import SetupProfileButton from "@/components/SetupProfileButton";
 
 // --- Helper functions ---
 
@@ -514,13 +516,23 @@ export default function DashboardPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left column - Profile */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 space-y-6">
             <ProfileCard
               user={user}
               skills={skills}
               analyzing={analyzing}
               onAnalyze={handleAnalyze}
             />
+            <PersonalityCard
+              userId={user?.id || ""}
+              initialPersonality={user?.personality_type ? {
+                type: user.personality_type,
+                title: user.personality_title || "",
+                description: user.personality_description || "",
+                rarity: user.personality_rarity || "common"
+              } : null}
+            />
+            <SetupProfileButton />
           </div>
 
           {/* Right column - Matches */}

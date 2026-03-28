@@ -13,6 +13,10 @@ export type User = {
   bio: string | null;
   location: string | null;
   html_url: string | null;
+  personality_type?: string;
+  personality_title?: string;
+  personality_description?: string;
+  personality_rarity?: "common" | "rare" | "epic" | "legendary";
 };
 
 export type Skill = {
