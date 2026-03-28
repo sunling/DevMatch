@@ -1,5 +1,0 @@
-{"timestamp":"00:00:00.689","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:00:08.525","source":"Browser","level":"INFO","message":"%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"}
-{"timestamp":"00:00:22.632","source":"Server","level":"WARN","message":"Error: Route \"/profile/[id]\" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis"}
-{"timestamp":"00:00:26.161","source":"Server","level":"WARN","message":"Error: Route \"/profile/[id]\" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis"}
-{"timestamp":"00:00:28.787","source":"Server","level":"WARN","message":"Error: Route \"/profile/[id]\" used `params.id`. `params` is a Promise and must be unwrapped with `await` or `React.use()` before accessing its properties. Learn more: https://nextjs.org/docs/messages/sync-dynamic-apis"}
