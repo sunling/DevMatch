@@ -12,6 +12,12 @@ import {
   Check,
   Calendar,
   FlaskConical,
+  Heart,
+  Target,
+  Zap,
+  Sparkles,
+  Briefcase,
+  Clock,
 } from "lucide-react";
 import { insforge, User as UserType } from "@/lib/insforge";
 import {
@@ -33,6 +39,20 @@ export default function SettingsPage() {
   const [displayName, setDisplayName] = useState("");
   const [isMentor, setIsMentor] = useState(false);
   const [isEventOrganizer, setIsEventOrganizer] = useState(false);
+  const [bio, setBio] = useState("");
+  const [dreamProject, setDreamProject] = useState("");
+  const [availability, setAvailability] = useState("");
+  const [projectStatus, setProjectStatus] = useState("");
+  
+  // Vibe check form state
+  const [vibeResponses, setVibeResponses] = useState({
+    "boring-problem": "",
+    "team-role": "",
+    "time-horizon": "",
+    "overhyped-tech": "",
+    "collaboration-style": "",
+  });
+  const [hasVibeCheck, setHasVibeCheck] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -83,9 +103,25 @@ export default function SettingsPage() {
           const userRecord = userData as UserType;
           setUser(userRecord);
           setDisplayName(userRecord.name);
+          setBio(userRecord.bio || "");
+          setDreamProject((userRecord as any).dream_project || "");
+          setAvailability((userRecord as any).availability || "");
+          setProjectStatus((userRecord as any).project_status || "");
           // Check if user has mentor role/flag in metadata
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           setIsMentor((authData.user.profile as any)?.is_mentor || false);
+          
+          // Load existing vibe check responses
+          const { data: vibeData } = await insforge.database
+            .from("vibe_check_responses")
+            .select("responses")
+            .eq("user_id", userRecord.id)
+            .single();
+          
+          if (vibeData?.responses) {
+            setVibeResponses(vibeData.responses as typeof vibeResponses);
+            setHasVibeCheck(true);
+          }
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load user");
@@ -122,16 +158,33 @@ export default function SettingsPage() {
       // Update user in database
       const { error: updateError } = await insforge.database
         .from("users")
-        .update({ name: displayName })
+        .update({ 
+          name: displayName,
+          bio,
+          dream_project: dreamProject,
+          availability,
+          project_status: projectStatus,
+        })
         .eq("id", user.id);
 
       if (updateError) {
         throw new Error(updateError.message);
       }
 
-      // Update mentor status in user metadata if needed
-      // Note: This would require a custom endpoint or function to update auth metadata
-      // For now, we'll just save the display name
+      // Save or update vibe check responses
+      if (Object.values(vibeResponses).some(v => v !== "")) {
+        const { error: vibeError } = await insforge.database
+          .from("vibe_check_responses")
+          .upsert({
+            user_id: user.id,
+            responses: vibeResponses,
+          }, { onConflict: "user_id" });
+
+        if (vibeError) {
+          throw new Error(vibeError.message);
+        }
+        setHasVibeCheck(true);
+      }
 
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
@@ -241,6 +294,186 @@ export default function SettingsPage() {
                   </div>
                 </div>
               )}
+
+              {/* Bio */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Bio
+                </label>
+                <textarea
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                  rows={3}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                  placeholder="Tell others about yourself..."
+                />
+              </div>
+
+              {/* Dream Project */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Dream Project
+                </label>
+                <textarea
+                  value={dreamProject}
+                  onChange={(e) => setDreamProject(e.target.value)}
+                  rows={2}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                  placeholder="What would you build if you had unlimited resources?"
+                />
+              </div>
+
+              {/* Availability & Status */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Availability
+                  </label>
+                  <select
+                    value={availability}
+                    onChange={(e) => setAvailability(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                  >
+                    <option value="">Select availability</option>
+                    <option value="full-time">Full-time</option>
+                    <option value="part-time">Part-time</option>
+                    <option value="weekends">Weekends only</option>
+                    <option value="evenings">Evenings only</option>
+                    <option value="not-available">Not available</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Project Status
+                  </label>
+                  <select
+                    value={projectStatus}
+                    onChange={(e) => setProjectStatus(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-colors"
+                  >
+                    <option value="">Select status</option>
+                    <option value="exploring">Exploring ideas</option>
+                    <option value="building">Actively building</option>
+                    <option value="hiring">Looking for collaborators</option>
+                    <option value="complete">Project complete</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Vibe Check Card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center">
+                  <Heart className="w-5 h-5 text-pink-600" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Vibe Check
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Help us understand your work style and preferences
+                  </p>
+                </div>
+                {hasVibeCheck && (
+                  <span className="ml-auto px-2.5 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                    Completed
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Boring Problem */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  What kind of problem bores you the most?
+                </label>
+                <select
+                  value={vibeResponses["boring-problem"]}
+                  onChange={(e) => setVibeResponses({...vibeResponses, "boring-problem": e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition-colors"
+                >
+                  <option value="">Select an option</option>
+                  <option value="legacy-migration">Migrating legacy code</option>
+                  <option value="crud-app">Building yet another CRUD app</option>
+                  <option value="landing-page">Creating landing pages</option>
+                  <option value="bug-fixing">Fixing bugs all day</option>
+                </select>
+              </div>
+
+              {/* Team Role */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  In a team, you naturally...
+                </label>
+                <select
+                  value={vibeResponses["team-role"]}
+                  onChange={(e) => setVibeResponses({...vibeResponses, "team-role": e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition-colors"
+                >
+                  <option value="">Select an option</option>
+                  <option value="designs">Design the architecture</option>
+                  <option value="breaks">Break things to find edge cases</option>
+                  <option value="protects">Protect code quality</option>
+                  <option value="connects">Connect people and ideas</option>
+                </select>
+              </div>
+
+              {/* Time Horizon */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Your preferred time horizon for shipping?
+                </label>
+                <select
+                  value={vibeResponses["time-horizon"]}
+                  onChange={(e) => setVibeResponses({...vibeResponses, "time-horizon": e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition-colors"
+                >
+                  <option value="">Select an option</option>
+                  <option value="ship-week">Ship something this week</option>
+                  <option value="ship-months">Ship in a few months</option>
+                  <option value="ship-years">Build for the long term</option>
+                </select>
+              </div>
+
+              {/* Overhyped Tech */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Most overhyped tech right now?
+                </label>
+                <select
+                  value={vibeResponses["overhyped-tech"]}
+                  onChange={(e) => setVibeResponses({...vibeResponses, "overhyped-tech": e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition-colors"
+                >
+                  <option value="">Select an option</option>
+                  <option value="ai-everything">AI everything</option>
+                  <option value="web3">Web3/Blockchain</option>
+                  <option value="nocode">No-code tools</option>
+                  <option value="microservices">Microservices</option>
+                </select>
+              </div>
+
+              {/* Collaboration Style */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Your ideal collaboration style?
+                </label>
+                <select
+                  value={vibeResponses["collaboration-style"]}
+                  onChange={(e) => setVibeResponses({...vibeResponses, "collaboration-style": e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 outline-none transition-colors"
+                >
+                  <option value="">Select an option</option>
+                  <option value="async-focused">Async, focused work</option>
+                  <option value="fast-fun">Fast and fun</option>
+                  <option value="thoughtful-kind">Thoughtful and kind</option>
+                  <option value="ambitious-challenging">Ambitious and challenging</option>
+                </select>
+              </div>
             </div>
           </div>
 

@@ -402,7 +402,15 @@ export default function DashboardPage() {
         .select("*")
         .eq("user_id", dbUser.id)
         .single();
-      setHasVibeCheck(!!vibeData);
+      const hasCompletedVibeCheck = !!vibeData;
+      setHasVibeCheck(hasCompletedVibeCheck);
+      
+      // Auto-show vibe check modal for new users who haven't completed it
+      // Check if user has skipped before using localStorage
+      const hasSkippedVibeCheck = localStorage.getItem(`vibe_check_skipped_${dbUser.id}`);
+      if (!hasCompletedVibeCheck && !hasSkippedVibeCheck) {
+        setShowVibeCheck(true);
+      }
 
       // Load matches
       await loadMatches(dbUser.id);
@@ -520,19 +528,39 @@ export default function DashboardPage() {
     );
   }
 
-  // Show vibe check only when explicitly requested (not auto-show for new users)
+  // Show vibe check modal
   if (showVibeCheck) {
     return (
       <div className="min-h-screen bg-gray-50 py-12 px-4">
-        <VibeCheck
-          userId={user.id}
-          onComplete={() => {
-            setShowVibeCheck(false);
-            setHasVibeCheck(true);
-            // Reload to show updated matches
-            window.location.reload();
-          }}
-        />
+        <div className="max-w-2xl mx-auto">
+          <VibeCheck
+            userId={user.id}
+            onComplete={() => {
+              setShowVibeCheck(false);
+              setHasVibeCheck(true);
+              // Reload to show updated matches
+              window.location.reload();
+            }}
+          />
+          {/* Skip option for users who don't want to complete it now */}
+          {!hasVibeCheck && (
+            <div className="mt-4 text-center">
+              <button
+                onClick={() => {
+                  setShowVibeCheck(false);
+                  // Remember that user skipped
+                  localStorage.setItem(`vibe_check_skipped_${user.id}`, "true");
+                }}
+                className="text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors"
+              >
+                Skip for now →
+              </button>
+              <p className="text-xs text-gray-400 mt-2">
+                You can complete this later in Settings
+              </p>
+            </div>
+          )}
+        </div>
       </div>
     );
   }
