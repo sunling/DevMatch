@@ -80,7 +80,7 @@ export default async function(req: Request): Promise<Response> {
       );
     }
     
-    const { userId } = body;
+    const { userId, eventId } = body;
 
     if (!userId) {
       return new Response(
@@ -147,8 +147,36 @@ export default async function(req: Request): Promise<Response> {
 
     const currentUserLocation = currentUser.location;
 
-    // Get all other users with personality
-    const usersResponse = await fetch(`${baseUrl}/api/database/records/users?select=id,github_id,name,avatar_url,bio,location,html_url,personality_type,personality_title,personality_description,personality_rarity&id=neq.${userId}`, {
+    // Get all other users with personality (optionally scoped to event participants)
+    let userFilter = `id=neq.${userId}`;
+    
+    if (eventId) {
+      // Fetch participant user IDs for this event
+      const participantsResponse = await fetch(
+        `${baseUrl}/api/database/records/event_participants?select=user_id&event_id=eq.${eventId}`,
+        {
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const participants = participantsResponse.ok ? await participantsResponse.json() : [];
+      const participantUserIds = participants
+        .map((p: any) => p.user_id)
+        .filter((id: string) => id !== userId);
+      
+      if (participantUserIds.length === 0) {
+        return new Response(
+          JSON.stringify({ matches: [], message: 'No other participants in this event yet.' }),
+          { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      
+      userFilter = `id=in.(${participantUserIds.join(',')})`;
+    }
+
+    const usersResponse = await fetch(`${baseUrl}/api/database/records/users?select=id,github_id,name,avatar_url,bio,location,html_url,personality_type,personality_title,personality_description,personality_rarity&${userFilter}`, {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'

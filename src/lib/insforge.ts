@@ -45,3 +45,26 @@ export type Match = {
   htmlUrl?: string;
   personality?: Personality;
 };
+
+export type Event = {
+  id: string;
+  event_url: string | null;
+  event_name: string;
+  event_date: string | null;
+  event_description: string | null;
+  platform: string;
+  host_user_id: string | null;
+  join_code: string;
+  created_at: string;
+  host_name?: string;
+  host_avatar?: string;
+  participant_count?: number;
+};
+
+export type EventParticipant = {
+  id: string;
+  event_id: string;
+  user_id: string;
+  joined_at: string;
+  user?: User;
+};

@@ -489,6 +489,12 @@ export default function DashboardPage() {
                 </span>
               )}
               <Link
+                href="/events"
+                className="text-gray-600 hover:text-gray-900 text-sm font-medium"
+              >
+                Events
+              </Link>
+              <Link
                 href="/settings"
                 className="flex items-center gap-1.5 text-gray-600 hover:text-gray-900 text-sm font-medium"
               >
