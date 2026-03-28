@@ -145,7 +145,7 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
             const currentDbUser = dbUsers?.[0] as { id: string } | undefined;
             if (currentDbUser) {
               const { data: matchesData } = await insforge.functions.invoke(
-                "matches",
+                "taste-based-matches",
                 { body: { userId: currentDbUser.id } }
               );
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -155,7 +155,7 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
               if (matchData) {
                 setMatchInfo({
                   matchScore: matchData.matchScore,
-                  sharedSkills: matchData.sharedSkills,
+                  sharedSkills: matchData.sharedSkills || [],
                 });
               }
             }
@@ -406,13 +406,13 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
                         <span
                           key={skill}
                           className={`px-3 py-1.5 rounded-lg text-sm font-medium ${
-                            matchInfo?.sharedSkills.includes(skill)
+                            matchInfo?.sharedSkills?.includes(skill)
                               ? "bg-indigo-100 text-indigo-700 border border-indigo-200"
                               : "bg-gray-100 text-gray-700 border border-gray-200"
                           }`}
                         >
                           {skill}
-                          {matchInfo?.sharedSkills.includes(skill) && (
+                          {matchInfo?.sharedSkills?.includes(skill) && (
                             <span className="ml-1.5 text-indigo-500">★</span>
                           )}
                         </span>
@@ -422,7 +422,7 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
                     )}
                   </div>
 
-                  {matchInfo && matchInfo.sharedSkills.length > 0 && (
+                  {matchInfo && matchInfo.sharedSkills?.length > 0 && (
                     <div className="mt-4 p-4 bg-indigo-50 rounded-lg border border-indigo-100">
                       <p className="text-sm text-indigo-700">
                         <span className="font-semibold">Shared:</span>{" "}

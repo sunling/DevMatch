@@ -107,9 +107,8 @@ export default function SettingsPage() {
           setDreamProject((userRecord as any).dream_project || "");
           setAvailability((userRecord as any).availability || "");
           setProjectStatus((userRecord as any).project_status || "");
-          // Check if user has mentor role/flag in metadata
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          setIsMentor((authData.user.profile as any)?.is_mentor || false);
+          setIsMentor((userRecord as any).is_mentor || false);
+          setIsEventOrganizer((userRecord as any).is_event_organizer || false);
           
           // Load existing vibe check responses
           const { data: vibeData } = await insforge.database
@@ -164,6 +163,8 @@ export default function SettingsPage() {
           dream_project: dreamProject,
           availability,
           project_status: projectStatus,
+          is_mentor: isMentor,
+          is_event_organizer: isEventOrganizer,
         })
         .eq("id", user.id);
 

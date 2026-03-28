@@ -249,7 +249,7 @@ export default function DashboardPage() {
   };
 
   // Load project visions from other users
-  const loadVisions = async () => {
+  const loadVisions = async (currentUserId?: string) => {
     try {
       const { data: visionsData } = await insforge.database
         .from("project_visions")
@@ -261,8 +261,30 @@ export default function DashboardPage() {
         .order("created_at", { ascending: false })
         .limit(10);
 
-      if (visionsData) {
-        setVisions(visionsData);
+      if (visionsData && visionsData.length > 0) {
+        // Fetch resonance counts for all loaded visions
+        const visionIds = visionsData.map((v: any) => v.id);
+        const { data: allResonances } = await insforge.database
+          .from("vision_resonances")
+          .select("vision_id, user_id")
+          .in("vision_id", visionIds);
+
+        const resonances = allResonances || [];
+
+        const enriched = visionsData.map((v: any) => {
+          const visionResonances = resonances.filter((r: any) => r.vision_id === v.id);
+          return {
+            ...v,
+            resonance_count: visionResonances.length,
+            has_resonated: currentUserId
+              ? visionResonances.some((r: any) => r.user_id === currentUserId)
+              : false,
+          };
+        });
+
+        setVisions(enriched);
+      } else {
+        setVisions(visionsData || []);
       }
     } catch (err) {
       console.error("Error loading visions:", err);
@@ -366,7 +388,7 @@ export default function DashboardPage() {
       await loadMatches(dbUser.id);
       
       // Load project visions
-      await loadVisions();
+      await loadVisions(dbUser.id);
     }
 
     async function init() {
@@ -674,9 +696,11 @@ export default function DashboardPage() {
                           status: vision.status,
                           createdAt: vision.created_at,
                           user: vision.user,
+                          resonanceCount: vision.resonance_count || 0,
+                          hasResonated: vision.has_resonated || false,
                         }}
                         currentUserId={user?.id}
-                        onResonanceChange={loadVisions}
+                        onResonanceChange={() => loadVisions(user?.id)}
                       />
                     ))}
                   </div>
