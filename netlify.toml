@@ -1,0 +1,19 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Environment variables should be set in Netlify dashboard
+# NEXT_PUBLIC_INSFORGE_BASE_URL
+# NEXT_PUBLIC_INSFORGE_ANON_KEY
+
+# Handle client-side routing for Next.js
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+
+[dev]
+  command = "npm run dev"
+  targetPort = 3000
+  publish = "dist"
