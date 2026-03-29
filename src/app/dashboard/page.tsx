@@ -268,7 +268,7 @@ function ProfileCard({
               <span>{user.location}</span>
             </div>
           )}
-          {user.html_url && (
+          {user.html_url && user.html_url.startsWith('https://github.com/') && (
             <a
               href={user.html_url}
               target="_blank"

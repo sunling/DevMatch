@@ -384,7 +384,7 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-3">Links</h3>
                   <div className="flex flex-wrap gap-3">
-                    {user.html_url && (
+                    {user.html_url && user.html_url.startsWith('https://github.com/') && (
                       <a
                         href={user.html_url}
                         target="_blank"
@@ -599,7 +599,7 @@ export default function ProfileClient({ userId }: ProfileClientProps) {
         </div>
 
         {/* Connect CTA */}
-        {user.html_url && (
+        {user.html_url && user.html_url.startsWith('https://github.com/') && (
           <div className="mt-8 text-center">
             <a
               href={user.html_url}
