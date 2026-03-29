@@ -388,13 +388,24 @@ export default function DashboardPage() {
       client: typeof insforge,
       authUser: any
     ) {
-      // Extract GitHub numeric ID from avatar URL
-      const avatarUrl = authUser.profile?.avatar_url || "";
-      const idMatch = avatarUrl.match(/\/u\/(\d+)/);
-      if (!idMatch) {
+      // Get GitHub ID from various possible sources
+      let githubId = authUser.profile?.github_id || 
+                     authUser.profile?.id || 
+                     authUser.user_metadata?.github_id;
+      
+      // Fallback: Extract from avatar URL if needed
+      if (!githubId) {
+        const avatarUrl = authUser.profile?.avatar_url || "";
+        const idMatch = avatarUrl.match(/\/u\/(\d+)/);
+        if (idMatch) {
+          githubId = idMatch[1];
+        }
+      }
+      
+      if (!githubId) {
+        console.error("Auth user profile:", authUser);
         throw new Error("Could not determine GitHub user ID from profile");
       }
-      const githubId = idMatch[1];
 
       // Fetch full GitHub profile via server-side proxy
       console.log("Fetching GitHub profile for ID:", githubId);
